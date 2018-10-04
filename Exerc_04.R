@@ -149,3 +149,13 @@ decisoes.drogas <- decisoes %>%
   mutate(total=droga+n_droga,
          proporcao=droga/total)
 decisoes.drogas
+
+#15 qual a quantidade total de processos por juiz
+quant.dec.mensal <- decisoes %>% 
+  filter(data_decisao) %>%
+  mutate(quant.mes = n(txt_decisao)) %>%
+  group_by(juiz,quant.mes) %>%
+  summarise(n=n()) %>%
+  spread(droga,n,fill = 0) %>%
+  mutate(total=droga+n_droga,
+         proporcao=droga/total)
