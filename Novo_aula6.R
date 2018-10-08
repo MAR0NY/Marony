@@ -98,6 +98,7 @@ decisoes.selecao <- decisoes %>%
    bancadas.coligacoes <- bancadas %>% 
      left_join(coligacoes) %>% 
      left_join(governismo)
+   ###
   
     
   
