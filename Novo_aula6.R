@@ -95,13 +95,32 @@ decisoes.selecao <- decisoes %>%
     governismo <- governismo_temer <- read_excel("Dados/governismo_temer.xlsx")
     bancadas <- readRDS("~/Marony/Dados/bancadas.rds") 
 #juntando com coligações
-   bancadas.coligacoes <- bancadas %>% 
+   bancadas.coligacoes.governismo <- bancadas %>% 
      left_join(coligacoes) %>% 
      left_join(governismo)
    ###
-  
-    
-  
+  ##criando uma coluna que é junção de 2 colunas
+   bancadas2 <- bancadas.coligacoes.governismo %>% 
+     unite(pres_ppres, #coluna criada
+           president,partypresid,
+           sep="-", remove=F)
+           bancadas2
+           #remove = F para não apagar as colunas originais
+           
 # Bônus: use `group_by` e `summarise` para identificar qual candidato tem a ----
 # coligação com menor média de concordância e qual candidato 
+           
+  governismo.coligacao <- bancadas2 %>% 
+             mutate(prop=prop.table(size)) %>% 
+             group_by(president,partypresid) %>% 
+             summarise(prop_total=sum(prop,na.rm = T),
+           apoio = mean(governismo, na.rm = T))
+           
+ #outra forma
+governismo.coligacao2 <- bancadas2 %>% 
+             group_by(president,partypresid) %>% 
+             summarise(size_total=sum(size,na.rm = T),
+                       apoio = mean(governismo, na.rm = T)) %>% 
+            mutate(prop=prop.table(size_total)) 
+           
 # tem a maior proporção total de assentos.
