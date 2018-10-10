@@ -54,6 +54,36 @@ decisoes_sep <- decisoes %>%
            fill = 'right')
 decisoes_sep
 
+exemplo.inner <- decisoes %>% 
+  filter(data_registro == "18/01/2018", !is.na(id_decisao)) %>% 
+  select(id_decisao, n_processo) %>% 
+  inner_join(processos, "n_processo")
+
+inner.decisoes.final <- inner_join(exemplo.inner, processos, "n_processo")
+
+#exemplo 2
+exemplo.inner2 <- decisoes %>% 
+  filter(data_registro == "18/01/2018", !is.na(id_decisao)) %>% 
+  select(id_decisao, n_processo) %>% 
+  dplyr::rename(numero_processo=n_processo) %>%
+  inner_join(processos, by=c("numero_processo"="n_processo"))
+             
+
+             
+#right join
+
+right.decisoes <- decisoes %>% 
+  filter(data_registro == "18/01/2018", !is.na(id_decisao)) %>% 
+  select(id_decisao, n_processo) %>% 
+  right_join(processos, "n_processo")
+#se quiser trazer somente algumas colunas de outras tabela
+# right_join(processos %>% dplyr::select(n_processo,partes))
+
+#mais um exemplo
+decisoes.selecao <- decisoes %>% 
+  dplyr::select(n_processo,partes)
+  right.decisoes2 <- right_join(decisoes.selecao, "n_processo")
+
 
 # Crie um objeto contendo informações sobre os tamanhos das bancadas dos ----
 # partidos (arquivo `bancadas.rds`), suas respectivas coligações 
@@ -61,6 +91,36 @@ decisoes_sep
 # grau de concordância com a agenda do Gov 
 # Temer (arquivo `governismo_temer.xlsx`). 
 
+    coligacoes <- read_excel("Dados/coligacoes.xlsx")
+    governismo <- governismo_temer <- read_excel("Dados/governismo_temer.xlsx")
+    bancadas <- readRDS("~/Marony/Dados/bancadas.rds") 
+#juntando com coligações
+   bancadas.coligacoes.governismo <- bancadas %>% 
+     left_join(coligacoes) %>% 
+     left_join(governismo)
+   ###
+  ##criando uma coluna que é junção de 2 colunas
+   bancadas2 <- bancadas.coligacoes.governismo %>% 
+     unite(pres_ppres, #coluna criada
+           president,partypresid,
+           sep="-", remove=F)
+           bancadas2
+           #remove = F para não apagar as colunas originais
+           
 # Bônus: use `group_by` e `summarise` para identificar qual candidato tem a ----
 # coligação com menor média de concordância e qual candidato 
+           
+  governismo.coligacao <- bancadas2 %>% 
+             mutate(prop=prop.table(size)) %>% 
+             group_by(president,partypresid) %>% 
+             summarise(prop_total=sum(prop,na.rm = T),
+           apoio = mean(governismo, na.rm = T))
+           
+ #outra forma
+governismo.coligacao2 <- bancadas2 %>% 
+             group_by(president,partypresid) %>% 
+             summarise(size_total=sum(size,na.rm = T),
+                       apoio = mean(governismo, na.rm = T)) %>% 
+            mutate(prop=prop.table(size_total)) 
+           
 # tem a maior proporção total de assentos.
