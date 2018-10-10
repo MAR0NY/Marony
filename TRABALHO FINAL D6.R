@@ -28,7 +28,17 @@ processos.por.ca <- Universal2016 %>%
    
   summarise(maxfem = max(num.proc.ca))
   
-  
+  grafico1 <- (ggplot(processos.por.ca, aes(x = Sexo,  colour = CA, size = Sexo)) +
+                  geom_bar()+
+                  facet_wrap(~Sexo))
+grafico1
+
+grafico2 <- (ggplot(processos.por.ca, aes(x = num.proc.ca, y = Sexo, colour = CA, size = num.proc.ca)) +
+               geom_boxplot()
+)
+               
+grafico2
+
 #número de processos por diretoria        
 processos.por.diretoria <- Universal2016 %>%
   group_by(Diretoria) %>% 
@@ -40,11 +50,17 @@ proc.diretoria.genero <- Universal2016 %>%
   group_by(Diretoria, Sexo) %>% 
   summarise(num.proc.diretoria = n() %>% 
   mutate(prop.dir = round(100*prop.table(num.proc.diretoria), digits = 2)) 
-    
-
+  
 #número processos por região
 processos.por.regiao<- Universal2016 %>%
   filter(!is.na(RegiÆo)) %>%
   group_by(RegiÆo,Sexo) %>% 
   summarise(num.proc.regiao = n()) %>% 
   arrange(desc(num.proc.regiao))
+
+grafico.reg <- (ggplot(processos.por.regiao, aes(x = RegiÆo,  colour = Sexo, size = Sexo)) +
+               geom_bar()
+)
+    
+
+grafico.reg
