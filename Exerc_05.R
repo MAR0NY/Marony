@@ -11,7 +11,7 @@ gc()
 
 # Carregue o arquivo `decisoes.rds` em um objeto chamado `decisoes`. ----
 
-decisoes <- read_rds("C:/Users/Aluno/Desktop/git/aulas_ENAP/CADS2018/Exercícios/dados/decisoes.rds")
+decisoes <- readRDS("~/Marony/decisoes.rds")
 
 # Qual quantidade mensal de decisões por juiz?
 
@@ -39,6 +39,7 @@ d_partes <- processos %>%
   select(n_processo, partes) %>% 
   unnest(partes)
 d_partes
+
 
 
 # Crie um objeto contendo informações sobre os tamanhos das bancadas dos ----
