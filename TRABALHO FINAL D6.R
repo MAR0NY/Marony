@@ -23,7 +23,12 @@ processos.por.ca <- Universal2016 %>%
   group_by(CA, Sexo) %>% 
   summarise(num.proc.ca = n()) %>% 
   mutate(prop.ca = round(prop.table(num.proc.ca), digits = 2)) 
-
+  
+  filtro.mulheres <- processos.por.ca %>%
+   
+  summarise(maxfem = max(num.proc.ca))
+  
+  
 #número de processos por diretoria        
 processos.por.diretoria <- Universal2016 %>%
   group_by(Diretoria) %>% 
@@ -33,12 +38,13 @@ processos.por.diretoria <- Universal2016 %>%
 #número de processos por diretoria  e genero     
 proc.diretoria.genero <- Universal2016 %>%
   group_by(Diretoria, Sexo) %>% 
-  summarise(num.proc.diretoria = n()) %>% 
-  mutate(prop.dir = round(100*prop.table(num.proc.diretoria), digits = 2))
+  summarise(num.proc.diretoria = n() %>% 
+  mutate(prop.dir = round(100*prop.table(num.proc.diretoria), digits = 2)) 
+    
 
 #número processos por região
 processos.por.regiao<- Universal2016 %>%
   filter(!is.na(RegiÆo)) %>%
-  group_by(RegiÆo) %>% 
+  group_by(RegiÆo,Sexo) %>% 
   summarise(num.proc.regiao = n()) %>% 
   arrange(desc(num.proc.regiao))
