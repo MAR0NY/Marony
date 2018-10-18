@@ -1,4 +1,4 @@
-##TRABALHO FINAL D6
+  ##TRABALHO FINAL D6
 
 lista.de.pacotes = c("tidyverse","lubridate","janitor","readxl","stringr","repmis") # escreva a lista de pacotes
 novos.pacotes <- lista.de.pacotes[!(lista.de.pacotes %in%
@@ -29,6 +29,8 @@ processos.por.ca <- Universal2016 %>%
   summarise(maxfem = max(num.proc.ca))
   
   grafico1 <- (ggplot(processos.por.ca, aes(x = Sexo,  colour = CA, size = Sexo)) +
+                 xlab("Log do Preço") + # adiciona descrição do eixo x
+                 ylab("Densidade") + # adiciona descrição do eixo y
                   geom_bar()+
                   facet_wrap(~Sexo))
 grafico1
@@ -58,8 +60,14 @@ processos.por.regiao<- Universal2016 %>%
   summarise(num.proc.regiao = n()) %>% 
   arrange(desc(num.proc.regiao))
 
-grafico.reg <- (ggplot(processos.por.regiao, aes(x = RegiÆo,  colour = Sexo, size = Sexo)) +
-               geom_bar()
+grafico.reg <- (ggplot(processos.por.regiao, aes( y =num.proc.regiao, x = RegiÆo, color = Sexo, fill = Sexo)) +
+                  xlab("Log do Preço") + # adiciona descrição do eixo x
+                  ylab("Densidade") + # adiciona descrição do eixo y
+                  ggtitle("Pesquisadores por Região") + 
+                  geom_bar(stat = "identity", position = "dodge") +
+                  theme_bw() +# adciona tema "Black and White"
+                  theme(plot.title = element_text(hjust = 0.5) )
+                  
 )
     
 

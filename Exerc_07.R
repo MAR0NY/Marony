@@ -73,10 +73,15 @@ out <- strat_design %>%
   summarize(api_diff = survey_mean(api00 - api99, vartype = "ci"),
             n = unweighted(n()))
 
-ggplot(data = out, aes(x = stype, y = api_diff, group = hs_grad_pct, fill = hs_grad_pct,
+ggplot(data = out, aes(x = stype, y = api_diff, group = hs_grad_pct,  fill = hs_grad_pct,
                        ymax = api_diff_upp, ymin = api_diff_low)) +
+  xlab("Log do Preço") + # adiciona descrição do eixo x
+  ylab("Densidade") + # adiciona descrição do eixo y
+  ggtitle("Testando título dos gráficos") + 
   geom_bar(stat = "identity", position = "dodge") +
   geom_errorbar(position = position_dodge(width = 0.9), width = 0.1) +
+  theme_bw() +# adciona tema "Black and White"
+  theme(plot.title = element_text(hjust = 0.5) )+
   geom_text(aes(y = 0, label = n), position = position_dodge(width = 0.9), vjust = -1)
 
 
@@ -86,3 +91,4 @@ ggplot(data = out, aes(x = stype, y = api_diff, group = hs_grad_pct, fill = hs_g
 strat_design %>%
   summarize_at(vars(starts_with("api")), survey_mean)
 srvyr::survey_mean()
+
